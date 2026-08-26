@@ -1,26 +1,484 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------ */
+/* Design tokens (Tailwind v4 CSS-first config)                        */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* --- Brand palette --- */
+  --color-graphite: #0f1420;
+  --color-graphite-soft: #2a3142;
+  --color-graphite-muted: #6b7280;
+  --color-brand: #f97316;
+  --color-brand-400: #fb923c;
+  --color-brand-500: #f97316;
+  --color-brand-600: #ea580c;
+  --color-brand-dark: #c2410c;
+  --color-brand-soft: #fff5ec;
+  --color-brand-tint: #fff1e3;
+  --color-success: #16a34a;
+  --color-success-soft: #ecfdf3;
+  --color-danger: #dc2626;
+  --color-danger-soft: #fef2f2;
+
+  --color-surface: #f7f8fa;
+  --color-surface-2: #eef1f5;
+  --color-card: #ffffff;
+  --color-line: #e7eaef;
+  --color-line-strong: #d4d9e1;
+
+  /* Ink scale (premium neutrals) */
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f4f9;
+  --color-ink-200: #e6eaf1;
+  --color-ink-300: #cfd6e1;
+  --color-ink-400: #9aa4b2;
+  --color-ink-500: #6b7280;
+  --color-ink-600: #4b5360;
+  --color-ink-700: #333b49;
+  --color-ink-800: #1f2530;
+  --color-ink-900: #0f1420;
+
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+
+  /* --- Soft, tinted shadows (modern depth) --- */
+  --shadow-xs: 0 1px 2px rgba(15, 20, 32, 0.05);
+  --shadow-sm: 0 1px 2px rgba(15, 20, 32, 0.04), 0 2px 6px rgba(15, 20, 32, 0.06);
+  --shadow-md: 0 4px 14px rgba(15, 20, 32, 0.07), 0 2px 4px rgba(15, 20, 32, 0.04);
+  --shadow-lg: 0 14px 40px rgba(15, 20, 32, 0.10), 0 4px 10px rgba(15, 20, 32, 0.05);
+  --shadow-xl: 0 24px 60px rgba(15, 20, 32, 0.13), 0 8px 18px rgba(15, 20, 32, 0.06);
+  --shadow-brand: 0 12px 30px rgba(249, 115, 22, 0.28), 0 4px 10px rgba(249, 115, 22, 0.18);
+  --shadow-brand-sm: 0 6px 16px rgba(249, 115, 22, 0.22);
+  --shadow-card-hover: 0 22px 48px rgba(15, 20, 32, 0.12), 0 6px 14px rgba(15, 20, 32, 0.06);
+
+  /* --- Radii --- */
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
+
+  /* --- Motion (brief section 46: 200–300ms, subtle) --- */
+  --animate-fade-in-up: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-scale-in: scale-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-shake: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-float-slow: float 13s ease-in-out infinite;
+  --animate-aurora: aurora 18s ease-in-out infinite;
+  --animate-pulse-soft: pulse-soft 4s ease-in-out infinite;
+  --animate-success-expand: success-expand 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-checkmark: checkmark 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+  --animate-confetti-pop: confetti-pop 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ------------------------------------------------------------------ */
+/* Keyframes                                                           */
+/* ------------------------------------------------------------------ */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  30%,
+  70% {
+    transform: translateX(3px);
+  }
+  50% {
+    transform: translateX(-3px);
+  }
+}
+
+/* Success screen: starts as a narrow column, scales/fades into a
+   full-width card. The parent container is what changes width; the
+   card itself transitions scale + opacity to feel like a transformation. */
+@keyframes success-expand {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* SVG checkmark — drawn after the card has expanded. */
+@keyframes checkmark {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Decorative ring pop around the check icon. */
+@keyframes confetti-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0);
+  }
+}
+
+@keyframes aurora {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  33% {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+    opacity: 0.7;
+  }
+  66% {
+    transform: translate3d(-3%, 4%, 0) scale(0.96);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Animated indicator (draws a check / pops a dot on select)         */
+/* ------------------------------------------------------------------ */
+
+/* Box background fills with brand color from the inside out. */
+@keyframes indicator-fill {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* The check mark is drawn by sweeping stroke-dashoffset to 0.
+   Path length is normalised by SVG (pathLength=1) so 1 -> 0 = full draw. */
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Tiny pop that lands after the check is drawn — a tactile "snap". */
+@keyframes check-pop {
+  0% {
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Radio dot grows from 0 with a gentle overshoot, mimicking the snap. */
+@keyframes dot-pop {
+  0% {
+    transform: scale(0);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-surface);
+  color: var(--color-graphite);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Ambient page background — subtle depth, never distracting */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(55% 45% at 88% -8%, rgba(249, 115, 22, 0.10), transparent 60%),
+    radial-gradient(45% 40% at -5% 8%, rgba(99, 102, 241, 0.06), transparent 55%),
+    radial-gradient(50% 45% at 50% 110%, rgba(249, 115, 22, 0.05), transparent 60%);
+}
+
+::selection {
+  background-color: var(--color-brand);
+  color: #fff;
+}
+
+/* Visible focus for keyboard users (a11y, brief section 48) */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default outline only when focus-visible is supported */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ------------------------------------------------------------------ */
+/* Utility classes                                                     */
+/* ------------------------------------------------------------------ */
+
+/* Brand gradient (CTA / accents) */
+.bg-brand-gradient {
+  background-image: linear-gradient(135deg, #ff9a3d 0%, #f97316 48%, #ea580c 100%);
+}
+.text-brand-gradient {
+  background-image: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* Card hover lift */
+.card-hover {
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-line-strong);
+}
+
+/* Gradient icon chip */
+.icon-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.9rem;
+  background-image: linear-gradient(135deg, #ff9a3d 0%, #f97316 55%, #ea580c 100%);
+  color: #fff;
+  box-shadow: var(--shadow-brand-sm);
+}
+
+/* Section eyebrow label */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-brand-dark);
+}
+.eyebrow::before {
+  content: '';
+  width: 1.75rem;
+  height: 2px;
+  border-radius: 9999px;
+  background-image: linear-gradient(90deg, #f97316, #fb923c);
+}
+
+/* Decorative blurred blobs */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(64px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ------------------------------------------------------------------ */
+/* Scroll reveal (JS toggles .is-visible)                              */
+/* ------------------------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .blob,
+  .float,
+  .animate-float,
+  .animate-float-slow,
+  .animate-aurora,
+  .animate-pulse-soft {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Smooth accordion (grid-rows technique, animates both directions)   */
+/* ------------------------------------------------------------------ */
+.accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.accordion-body.open {
+  grid-template-rows: 1fr;
+}
+.accordion-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Range input styling (brief section 44: RangeSlider)                */
+/* ------------------------------------------------------------------ */
+input[type='range'].rem-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-line);
+  outline: none;
+}
+input[type='range'].rem-range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 9999px;
+}
+input[type='range'].rem-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  margin-top: -9px;
+  border-radius: 9999px;
+  background-image: linear-gradient(135deg, #ff9a3d, #ea580c);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+input[type='range'].rem-range::-webkit-slider-thumb:hover {
+  transform: scale(1.12);
+  box-shadow: 0 3px 12px rgba(249, 115, 22, 0.5);
+}
+input[type='range'].rem-range:active::-webkit-slider-thumb {
+  transform: scale(1.05);
+}
+input[type='range'].rem-range::-moz-range-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-line);
+}
+input[type='range'].rem-range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  background-image: linear-gradient(135deg, #ff9a3d, #ea580c);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
+  cursor: pointer;
+}
+
+/* Utility: hide scrollbar but keep scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
