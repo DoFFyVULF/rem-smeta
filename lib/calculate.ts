@@ -4,6 +4,7 @@ import {
   CONDITION_FACTORS,
   EXTRA_FIXED,
   EXTRA_PER_SQM,
+  PLANIROVKA_BASE,
   URGENT_FACTOR,
   getRepairMeta,
 } from './constants';
@@ -59,12 +60,17 @@ export function calculateEstimate(state: CalculatorState): CalculationResult {
     }
   });
 
+  const planirovkaBase =
+    bathrooms * PLANIROVKA_BASE.bathroom +
+    balconies * PLANIROVKA_BASE.balcony +
+    doors * PLANIROVKA_BASE.door;
+
   let extrasFixed = 0;
   if (extras.bathroomTurnkey) extrasFixed += bathrooms * EXTRA_FIXED.bathroomTurnkey;
   if (extras.balconyTurnkey) extrasFixed += balconies * EXTRA_FIXED.balconyTurnkey;
   if (extras.interiorDoors) extrasFixed += doors * EXTRA_FIXED.interiorDoors;
 
-  const subtotal = conditionPrice + extrasPerSqm + extrasFixed;
+  const subtotal = conditionPrice + extrasPerSqm + planirovkaBase + extrasFixed;
 
   const cityFactor = CITY_FACTORS[city];
   const afterCity = subtotal * cityFactor;
@@ -93,6 +99,13 @@ export function calculateEstimate(state: CalculatorState): CalculationResult {
       amount: roundThousands(area * perSqm),
     });
   });
+  if (planirovkaBase > 0) {
+    lines.push({
+      key: 'planirovkaBase',
+      label: 'Планировка (санузлы, балконы, двери)',
+      amount: roundThousands(planirovkaBase),
+    });
+  }
   if (extras.bathroomTurnkey) {
     lines.push({
       key: 'bathroomTurnkey',
@@ -133,6 +146,7 @@ export function calculateEstimate(state: CalculatorState): CalculationResult {
     base: round2(base),
     conditionPrice: roundThousands(conditionPrice),
     extrasPerSqm: roundThousands(extrasPerSqm),
+    planirovkaBase: roundThousands(planirovkaBase),
     extrasFixed: roundThousands(extrasFixed),
     subtotal: roundThousands(subtotal),
     cityFactor,

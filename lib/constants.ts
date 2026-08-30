@@ -44,6 +44,13 @@ export const EXTRA_PER_SQM: Partial<Record<ExtraKey, number>> = {
   stretchCeiling: 650,
 };
 
+/** Base fixed costs per planirovka unit (always included in calculation). */
+export const PLANIROVKA_BASE = {
+  bathroom: 25000,
+  balcony: 15000,
+  door: 5000,
+} as const;
+
 /** Extras billed as a fixed amount per unit (bathroom / balcony / door). */
 export const EXTRA_FIXED = {
   bathroomTurnkey: 95000,

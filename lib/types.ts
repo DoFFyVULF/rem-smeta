@@ -81,7 +81,9 @@ export interface CalculationResult {
   conditionPrice: number;
   /** area * sum(selected per-sqm extras) */
   extrasPerSqm: number;
-  /** bathrooms*95k + balconies*35k + doors*7.5k + electrical flat? (electrical/plumbing etc are per-sqm) */
+  /** Base planirovka costs (bathrooms, balconies, doors) — always included */
+  planirovkaBase: number;
+  /** Additional turnkey extras on top of planirovka base */
   extrasFixed: number;
   /** conditionPrice + extrasPerSqm + extrasFixed */
   subtotal: number;
